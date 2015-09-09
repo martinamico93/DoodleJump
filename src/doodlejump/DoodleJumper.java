@@ -61,7 +61,7 @@ public class DoodleJumper {
     }
     public static void loadImages() {
         try {
-            jumperImage = ImageIO.read(new File("src/images/jumper.png"));
+            jumperImage = ImageIO.read(new File("src/images/flappy-base.png"));
         } catch (IOException e) {
             System.out.println(e);
         }
