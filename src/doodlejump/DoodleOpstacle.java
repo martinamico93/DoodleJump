@@ -16,7 +16,6 @@ import javax.imageio.ImageIO;
  * @author Marta Cvoro
  */
 public class DoodleOpstacle {
-static BufferedImage pillar = null;
     static BufferedImage PillarHead = null;
 
     private int x;
@@ -25,13 +24,9 @@ static BufferedImage pillar = null;
     
     private static int SPEED_X = 2;
     
-    private final int OBSTACLE_WIDTH = 80;
-    private final int GAP_HEIGHT = 150;
-    
     private Rectangle2D.Double Rectangle;
     
-    
-    static int getSpeed() {
+    public static int getSpeed() {
         return SPEED_X;
     }
     static void setSpeed(int i){
@@ -56,7 +51,7 @@ static BufferedImage pillar = null;
     
     public static void loadImages() {
         try {
-            PillarHead = ImageIO.read(new File("src/images/upper-pillar-head.png"));    
+            PillarHead = ImageIO.read(new File("src/images/upper-pillar-head.png"));
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -69,11 +64,6 @@ static BufferedImage pillar = null;
     public boolean isOutOfPanel() {
         return y  > MainFrame.getHeighT() - 50;
     }
-    
-    public static BufferedImage getPillarImage() {
-        return pillar;
-    }
-    
     
     public static BufferedImage getPillarHeadImage() {
         return PillarHead;
