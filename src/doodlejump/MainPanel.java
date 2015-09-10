@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class MainPanel extends JPanel implements ActionListener, KeyListener{
-    private boolean inGame;
+    private static boolean inGame;
     private Font mainFont;
     private boolean midAir;
     private boolean firstEnter;
@@ -38,6 +38,10 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
     
     private Timer timer;
     private Random random;
+
+    public static boolean isInGame() {
+        return inGame;
+    }
     
     public MainPanel() {
         mainFont = new Font("Ariel", Font.BOLD, 18);
@@ -52,7 +56,7 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
         setBackground(Color.WHITE);
         setFocusable(true);
         
-        addKeyListener( this);
+        addKeyListener(this);
         
         resetJumper();
         
@@ -60,6 +64,7 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
         frames = 0;
         
         timer = new Timer(30, this);
+        timer.start();
         
         random = new Random();
         
@@ -81,9 +86,8 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
         }
     }
 
-    private void gameOver() {
+    public void gameOver() {
         obstacles.clear();
-        timer.stop();
         resetJumper();
         inGame = false;
         midAir = false;
@@ -175,23 +179,30 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
     
     private void moveObjects() {
         int touch = -2;
-        jumper.move();
+            jumper.move();
         for (DoodleOpstacle obstacle : obstacles) {
             obstacle.move();
-            touch = hasJumperHitObstacle();
+            touch = hasJumperHitObstacle();   
         }
         
+        backgroundPosition--;
+        
+        if (backgroundPosition < -BACKGROUND_WIDTH) {
+            backgroundPosition = 0;
+        }
+        if(touch >= 0){
+            jumper.setY(obstacles.get(touch).getY() - 10);
+        }
     }
     
     private void cleanObstacles() {
-        int d = obstacles.size();
         int i=0;
         if( !obstacles.isEmpty())
             if (obstacles.get(i).getY() >= PANEL_HEIGHT - 30){
                 obstacles.remove(i);
             }
     }
-
+    
     private void generateObstacles() {
         if (frames % 70 == 0) {
             obstacles.add(new DoodleOpstacle(random.nextInt(200), random.nextInt(200)+150));
@@ -203,20 +214,20 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(!inGame)
-        {
-            inGame = true;
-            timer.start();
-            frames = 70;
-            firstEnter = true;
-            jumper.setGRAVITY(0);
-        }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            if(firstEnter){
+            if(firstEnter && inGame){
                 firstEnter = false;
+                jumper.jump();
+                
+                System.out.println("sad smo ovde");
             }
-            else if(inGame){
-                jumper.setGRAVITY(2);
+            if (!inGame){
+                inGame = true;
+                frames = 65;
+                firstEnter = true;
+                jumper.setGRAVITY(0);
+            }
+            else{
                 if(!midAir){
                     jumper.jump();
                     midAir = true;
@@ -254,6 +265,6 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
         if(!obstacles.isEmpty())
             if(!obstacles.get(0).getRectangle().intersects(jumper.getBounds()))
                 jumper.setGRAVITY(1);
+            }
     }
-}
-
+   
