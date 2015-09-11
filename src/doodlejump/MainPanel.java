@@ -30,7 +30,7 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
     private Image background;
     private int backgroundPosition;
     private final int BACKGROUND_WIDTH = 600;
-
+    int frameCount = 1;
     private final int PANEL_HEIGHT = MainFrame.getHeighT();
     private final int PANEL_WIDTH = MainFrame.getWidtH();
     
@@ -49,6 +49,7 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
         loadImages();
         DoodleJumper.loadImages();
         DoodleOpstacle.loadImages();
+        
         
         backgroundPosition = 0;
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
@@ -149,6 +150,11 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
             handleCollisions();
             generateObstacles();
             cleanObstacles();
+            if(frames == frameCount*1000){
+                System.out.print("\tBRZINA POVECANA = " + frameCount);
+                frameCount++;
+                DoodleOpstacle.setSpeed(frameCount+1);
+            }
         }
         repaint();
     }
@@ -157,8 +163,9 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
         
         if(jumper.getSpeedY() >=0)
         {
-            if(hasJumperHitObstacle()!= -1)
+            if(hasJumperHitObstacle()!= -1){
                 stop(jumper, obstacles.get(hasJumperHitObstacle()));
+        }
         }
         if (jumperY + jumper.getHeight() > PANEL_HEIGHT) {
             gameOver();
@@ -262,9 +269,9 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
                 jumper.setX(PANEL_WIDTH - 20);
             
         }
-        if(!obstacles.isEmpty())
+        if(!obstacles.isEmpty()){
             if(!obstacles.get(0).getRectangle().intersects(jumper.getBounds()))
                 jumper.setGRAVITY(1);
             }
-    }
-   
+    }   
+}
