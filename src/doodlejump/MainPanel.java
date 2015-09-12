@@ -26,8 +26,10 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
     private boolean firstEnter;
     private DoodleJumper jumper;
     private ArrayList<DoodleOpstacle> obstacles;
+    private boolean startPicture;
     
     private Image background;
+    private Image startImage;
     private int backgroundPosition;
     private final int BACKGROUND_WIDTH = 600;
     int frameCount = 1;
@@ -47,9 +49,6 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
         mainFont = new Font("Ariel", Font.BOLD, 18);
         firstEnter = false;
         loadImages();
-        DoodleJumper.loadImages();
-        DoodleOpstacle.loadImages();
-        
         
         backgroundPosition = 0;
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
@@ -58,19 +57,13 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
         setFocusable(true);
         
         addKeyListener(this);
-        
-        resetJumper();
-        
+        startPicture();
         obstacles = new ArrayList<>();
-        frames = 0;
-        
         timer = new Timer(30, this);
         timer.start();
         
         random = new Random();
         
-        inGame = false;
-        midAir = false;
     }
     
     private void resetJumper() {
@@ -78,35 +71,50 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
         DoodleOpstacle.setSpeed(2);
         jumper.setGRAVITY(2);
     }
-    
+    private void startPicture(){
+        startPicture = true;
+    }
     private void loadImages() {
         try {
             background = ImageIO.read(new File("src/images/background.png"));
+            startImage = ImageIO.read(new File("src/images/start.png"));
+	    DoodleJumper.loadImages();
+            DoodleOpstacle.loadImages();
         } catch (IOException e) {
             System.out.println(e);
         }
     }
 
-    public void gameOver() {
+    public void startGame(){
+        inGame = false;
+        midAir = false;
+        resetJumper();
+        frames = 0;
+        startPicture = false;
+    }
+    private void gameOver() {
         obstacles.clear();
         resetJumper();
         inGame = false;
         midAir = false;
+        startPicture = true;
     }
-    
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        
         Graphics2D g2d = (Graphics2D)g;
-        g.drawRect(jumper.getX(), jumper.getY(), jumper.getWidth(), jumper.getHeight());
-        drawBackground(g2d);
-        drawJumper(g2d);
-        
-        if (inGame) {
-            drawObstacles(g2d);
-        } else {
-            drawMessage(g2d);
+        if(startPicture){
+            g2d.drawImage(startImage, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, null);
+        }else{
+            g.drawRect(jumper.getX(), jumper.getY(), jumper.getWidth(), jumper.getHeight());
+            drawBackground(g2d);
+            drawJumper(g2d);
+
+            if (inGame) {
+                drawObstacles(g2d);
+            } else {
+                drawMessage(g2d);
+            }
         }
     }
     
@@ -273,5 +281,5 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
             if(!obstacles.get(0).getRectangle().intersects(jumper.getBounds()))
                 jumper.setGRAVITY(1);
             }
-    }   
+    }
 }

@@ -51,7 +51,7 @@ public class DoodleOpstacle {
     
     public static void loadImages() {
         try {
-            PillarHead = ImageIO.read(new File("src/images/upper-pillar-head.png"));
+            PillarHead = ImageIO.read(new File("src/images/pillar-head.png"));
         } catch (IOException e) {
             System.out.println(e);
         }

@@ -12,7 +12,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import static sun.security.ssl.Debug.Help;
 public class MainFrame extends JFrame{
     private final static int Height = 600;
     private final static int Width = 400;  
@@ -83,11 +82,11 @@ public class MainFrame extends JFrame{
                     answer = javax.swing.JOptionPane.showConfirmDialog(null, "Are you sure you want to cancel this game ?", "QUESTION ?",
                             javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.WARNING_MESSAGE);
                     if (answer == javax.swing.JOptionPane.YES_OPTION) {
-                        panel.gameOver();
+                        panel.startGame();
                     }
                 }
                 else
-                    panel.gameOver();
+                    panel.startGame();
             }
         });
 
