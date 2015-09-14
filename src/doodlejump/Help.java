@@ -27,7 +27,7 @@ public class Help extends JFrame {
         this.setAlwaysOnTop(true);
         createdBy.setText("Created by: Marta Čvoro");
         rulesOfGame.setBackground(this.getBackground());
-        rulesOfGame.setText("Moraces odkucati tekst ovde");
+        rulesOfGame.setText(".......");
         rulesOfGame.setBounds(0, 0, 262, 248);
         rulesOfGame.setEditable(false);
 

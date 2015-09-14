@@ -33,6 +33,8 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
     private int backgroundPosition;
     private final int BACKGROUND_WIDTH = 600;
     int frameCount = 1;
+    int score = -2;
+    
     private final int PANEL_HEIGHT = MainFrame.getHeighT();
     private final int PANEL_WIDTH = MainFrame.getWidtH();
     
@@ -84,13 +86,15 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
             System.out.println(e);
         }
     }
-
     public void startGame(){
         inGame = false;
         midAir = false;
         resetJumper();
         frames = 0;
+        score = -1;
         startPicture = false;
+        
+
     }
     private void gameOver() {
         obstacles.clear();
@@ -99,12 +103,15 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
         midAir = false;
         startPicture = true;
     }
+    
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D)g;
         if(startPicture){
             g2d.drawImage(startImage, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, null);
+            if(score >=0)
+                drawEndScore(g2d);
         }else{
             g.drawRect(jumper.getX(), jumper.getY(), jumper.getWidth(), jumper.getHeight());
             drawBackground(g2d);
@@ -112,6 +119,7 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
 
             if (inGame) {
                 drawObstacles(g2d);
+                drawScore(g2d);
             } else {
                 drawMessage(g2d);
             }
@@ -128,6 +136,27 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
 
         g2d.drawString(message, (PANEL_WIDTH - stringWidth) / 2, PANEL_HEIGHT/2);
     }
+    private void drawScore(Graphics g2d) {
+        g2d.setFont(mainFont);
+            
+        String message = "SCORE: " + score;
+
+        FontMetrics fontMetrics = g2d.getFontMetrics(mainFont);
+        int stringWidth = fontMetrics.stringWidth(message);
+        g2d.setColor(Color.red);
+        g2d.drawString(message, 0, PANEL_HEIGHT);
+    }
+    private void drawEndScore(Graphics g2d) {
+        g2d.setFont(mainFont);
+            
+        String message = "SCORE: " + score;
+
+        FontMetrics fontMetrics = g2d.getFontMetrics(mainFont);
+        int stringWidth = fontMetrics.stringWidth(message);
+        g2d.setColor(Color.green);
+        g2d.drawString(message, (PANEL_WIDTH - stringWidth) / 2, PANEL_HEIGHT/2);
+    }
+    
     private void drawBackground(Graphics2D g2d) {
         g2d.drawImage(background, 0, backgroundPosition, BACKGROUND_WIDTH, PANEL_HEIGHT, null);
         
@@ -138,7 +167,7 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
     
     private void drawJumper(Graphics2D g2d) {
         g2d.drawImage(DoodleJumper.getImage(), jumper.getX(), jumper.getY(), jumper.getWidth(), jumper.getHeight(), null);
-    }
+    }   
     
     private void drawObstacles(Graphics2D g2d) {
         for (DoodleOpstacle obstacle : obstacles) {
@@ -172,6 +201,8 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
         if(jumper.getSpeedY() >=0)
         {
             if(hasJumperHitObstacle()!= -1){
+                if(midAir)
+                    updateScore(5);
                 stop(jumper, obstacles.get(hasJumperHitObstacle()));
         }
         }
@@ -194,19 +225,14 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
     
     private void moveObjects() {
         int touch = -2;
-            jumper.move();
         for (DoodleOpstacle obstacle : obstacles) {
             obstacle.move();
-            touch = hasJumperHitObstacle();   
         }
-        
+        jumper.move();
         backgroundPosition--;
         
         if (backgroundPosition < -BACKGROUND_WIDTH) {
             backgroundPosition = 0;
-        }
-        if(touch >= 0){
-            jumper.setY(obstacles.get(touch).getY() - 10);
         }
     }
     
@@ -229,7 +255,8 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+        if(!startPicture){
+            if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             if(firstEnter && inGame){
                 firstEnter = false;
                 jumper.jump();
@@ -239,6 +266,7 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
             if (!inGame){
                 inGame = true;
                 frames = 65;
+                score = 0;
                 firstEnter = true;
                 jumper.setGRAVITY(0);
             }
@@ -253,13 +281,15 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
             moveSide(-5);
         else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
             moveSide(5);
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {}
 
-    private void stop(DoodleJumper jumpers, DoodleOpstacle obstacle) {
-        jumpers.stop(obstacle.getY() - 20);
+    private void stop(DoodleJumper jumpers, DoodleOpstacle obstacle) 
+    {
+        jumpers.stop(obstacle.getY() - 20, DoodleOpstacle.getSpeed());
         midAir = false;
     }
 
@@ -281,5 +311,8 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
             if(!obstacles.get(0).getRectangle().intersects(jumper.getBounds()))
                 jumper.setGRAVITY(1);
             }
+    }
+    private void updateScore(int point){
+        score += point;
     }
 }

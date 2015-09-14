@@ -85,10 +85,13 @@ public class DoodleJumper {
         return jumperImage;
     }
     
-    void stop(int position) {
+    public void setSpeedY(int speedY) {
+	this.speedY = speedY;
+}
+    void stop(int position, int speed) {
         y = position;
         setGRAVITY(0);
-        speedY = Math.abs(DoodleOpstacle.getSpeed());
+        speedY = speed;
     }
     public Rectangle2D.Double getBounds() {
         return new Rectangle2D.Double(x, y, JUMPER_WIDTH, JUMPER_HEIGHT);
