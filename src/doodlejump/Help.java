@@ -33,7 +33,9 @@ public class Help extends JFrame {
                 + " After you lose, calmly recall exactly what\n "
                 + " happened  before you crashed, died, etc.\n"
                 + "  In retrospect, what could\n"
-                + " you have done to avoid that end? ");
+                + " you have done to avoid that end?\n"
+                + " Doodle jump is not your life,\n"
+                + "don't let it waste your time.");
          rulesOfGame.setBounds(0, 0, 262, 248);
         rulesOfGame.setEditable(false);
 
