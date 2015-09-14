@@ -27,8 +27,14 @@ public class Help extends JFrame {
         this.setAlwaysOnTop(true);
         createdBy.setText("Created by: Marta Čvoro");
         rulesOfGame.setBackground(this.getBackground());
-        rulesOfGame.setText(".......");
-        rulesOfGame.setBounds(0, 0, 262, 248);
+        rulesOfGame.setText (  "  Keep jumping higher and higher while\n "
+                + " earning points.\n"
+                + " As you go higher, the platforms move faster\n"
+                + " After you lose, calmly recall exactly what\n "
+                + " happened  before you crashed, died, etc.\n"
+                + "  In retrospect, what could\n"
+                + " you have done to avoid that end? ");
+         rulesOfGame.setBounds(0, 0, 262, 248);
         rulesOfGame.setEditable(false);
 
         createdBy.setVerticalAlignment(JLabel.BOTTOM);
