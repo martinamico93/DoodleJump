@@ -94,6 +94,8 @@ public class MainPanel extends JPanel implements ActionListener, KeyListener{
         score = -1;
         startPicture = false;
         
+        if(!obstacles.isEmpty())
+         obstacles.clear();
 
     }
     private void gameOver() {
