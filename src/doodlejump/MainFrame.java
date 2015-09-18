@@ -24,6 +24,7 @@ public class MainFrame extends JFrame{
     }   
     public MainFrame(){
         setSize(Width, Height);
+        setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);       
         setJMenuBar(initMenu());

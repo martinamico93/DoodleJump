@@ -44,10 +44,18 @@ public class DoodleOpstacle {
         this.x = x;
         this.maxHeight = maxHeight;
         
-        int y = 0;
+        this.y = 0;
         
         Rectangle = new Rectangle2D.Double(x, y, maxHeight, 20);
     }
+     public DoodleOpstacle(int x, int maxHeight, int y1) {
+         this.x = x;
+        this.maxHeight = maxHeight;
+        
+        this.y = y1;
+        
+        Rectangle = new Rectangle2D.Double(x, y, maxHeight, 20);
+     }
     
     public static void loadImages() {
         try {
